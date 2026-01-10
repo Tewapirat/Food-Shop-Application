@@ -57,6 +57,11 @@ func DefaultPromotions() []model.Promotion {
 			Title:       "Pair discount 5% (ORANGE/PINK/GREEN)",
 			Description: "Every pair (2 items of the same code) for ORANGE/PINK/GREEN gets 5% off that pair value.",
 		},
+		{
+			Code:        "Bulk",
+			Title:       "Bulk discount 7% (more than 5 items)",
+			Description: "Get 7% discount on the total bill if customer orders more than 5 items.",
+		},
 	}
 }
 

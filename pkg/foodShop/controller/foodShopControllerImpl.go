@@ -173,6 +173,7 @@ func (c *FoodShopControllerImpl) handleQuoteOrderJSON(rl *readline.Instance) boo
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Subtotal",        quote.Subtotal.String())
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Pair Discount",   quote.PairDiscount.String())
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Member Discount", quote.MemberDiscount.String())
+	fmt.Fprintf(c.out, "%-16s : %s\n", "Bulk Discount",   quote.BulkDiscount.String())
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Total",           quote.Total.String())	
 
 	return true

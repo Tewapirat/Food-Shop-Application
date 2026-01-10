@@ -82,6 +82,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 	lines := make([]_foodShopModel.OrderLine, 0, len(req.Items))
 
 	var subtotal domain.Money
+	totalQty := 0
 
 	for rawCode, qty := range req.Items {
 		if qty < 1 {
@@ -100,6 +101,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 
 		priceByCode[code] = menuItem.Price
 		qtyByCode[code] += qty
+		totalQty += qty
 
 
 
@@ -123,13 +125,16 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 	}
 
 	afterPairDiscount := subtotal.Sub(pairDiscount)
+	bulkDiscount := claculateBulkDiscount(afterPairDiscount, totalQty)
+	afterBulkDiscount := afterPairDiscount.Sub(bulkDiscount)
+	
 
 	var memberDiscount domain.Money
 	if req.Member {
-		memberDiscount = afterPairDiscount.Percent(memberDiscountPercent)
+		memberDiscount = afterBulkDiscount.Percent(memberDiscountPercent)
 	}
 
-	total := afterPairDiscount.Sub(memberDiscount)
+	total := afterBulkDiscount.Sub(memberDiscount)
 
 	s.orderNo++
 
@@ -140,6 +145,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 	Line:          lines,
 	Subtotal:       subtotal,
 	PairDiscount:   pairDiscount,
+	BulkDiscount:  bulkDiscount,
 	MemberDiscount: memberDiscount,
 	Total:          total,
 	
@@ -150,6 +156,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 		Lines:          lines,
 		Subtotal:       subtotal,
 		PairDiscount:   pairDiscount,
+		BulkDiscount:  bulkDiscount,
 		MemberDiscount: memberDiscount,
 		Total:          total,
 	}, nil
@@ -189,5 +196,12 @@ func calculatePairDiscount(
 	}
 
 	return totalDiscount, nil
+}
+
+func claculateBulkDiscount(base domain.Money, totalQty int) domain.Money {
+	if totalQty <= 5 {
+		return  domain.THB(0)
+	}
+	return base.Percent(7)
 }
 

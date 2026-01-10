@@ -42,6 +42,9 @@ func DefaultMenu() map[model.MenuItemCode]model.MenuItem {
 		"PINK":   {Code: "PINK", Name: "Pink set", Price: domain.THB(80)},
 		"PURPLE": {Code: "PURPLE", Name: "Purple set", Price: domain.THB(90)},
 		"ORANGE": {Code: "ORANGE", Name: "Orange set", Price: domain.THB(120)},
+		"GRAY":   {Code: "GRAY", Name: "Gray set", Price: domain.THB(55)},
+		"BROWN": {Code: "BROWN", Name: "Brown set", Price: domain.THB(65)},
+		"BLACK": {Code: "BLACK", Name: "Black set", Price: domain.THB(70)},
 	}
 }
 

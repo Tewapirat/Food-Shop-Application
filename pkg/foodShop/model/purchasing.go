@@ -6,6 +6,7 @@ import "github.com/TewApirat/food-shop/pkg/foodShop/domain"
 type PurchasingRequest struct {
 	Items  map[string]int `json:"items"`
 	Member bool           `json:"member"`
+	Coupon string         `json:"coupon,omitempty"`
 }
 
 type OrderLine struct {
@@ -20,6 +21,7 @@ type OrderQuote struct {
 	Lines          []OrderLine
 	Subtotal       domain.Money
 	PairDiscount   domain.Money
+	Coupon         domain.Money
 	MemberDiscount domain.Money
 	Total          domain.Money
 }

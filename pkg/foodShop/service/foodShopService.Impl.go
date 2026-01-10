@@ -123,13 +123,19 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 	}
 
 	afterPairDiscount := subtotal.Sub(pairDiscount)
+	conponDiscount, err := calculateCouponDiscount(afterPairDiscount,req.Coupon)
+	if err != nil {
+		return _foodShopModel.OrderQuote{}, err
+	}
+	afterCouponDiscount := afterPairDiscount.Sub(conponDiscount)
+
 
 	var memberDiscount domain.Money
 	if req.Member {
-		memberDiscount = afterPairDiscount.Percent(memberDiscountPercent)
+		memberDiscount = afterCouponDiscount.Percent(memberDiscountPercent)
 	}
 
-	total := afterPairDiscount.Sub(memberDiscount)
+	total := afterCouponDiscount.Sub(memberDiscount)
 
 	s.orderNo++
 
@@ -140,6 +146,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 	Line:          lines,
 	Subtotal:       subtotal,
 	PairDiscount:   pairDiscount,
+	Coupon:	  conponDiscount,
 	MemberDiscount: memberDiscount,
 	Total:          total,
 	
@@ -150,6 +157,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 		Lines:          lines,
 		Subtotal:       subtotal,
 		PairDiscount:   pairDiscount,
+		Coupon:	  conponDiscount,
 		MemberDiscount: memberDiscount,
 		Total:          total,
 	}, nil
@@ -191,3 +199,22 @@ func calculatePairDiscount(
 	return totalDiscount, nil
 }
 
+func calculateCouponDiscount(base domain.Money, couponCode string) (domain.Money, error) {
+	code := strings.ToUpper(strings.TrimSpace(couponCode))
+
+	if code == "" {
+		return domain.THB(0), nil
+	}
+
+	switch code {
+	case "OFF20":
+		minBase := domain.THB(200)
+		discount := domain.THB(20)
+		if base >= minBase{
+			return discount, nil
+		}
+		return domain.THB(0), nil
+	default:
+		return domain.THB(0), &_foodShopException.InvalidCouponError{Code: couponCode}
+	}
+}

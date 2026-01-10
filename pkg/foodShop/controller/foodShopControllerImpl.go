@@ -153,7 +153,6 @@ func (c *FoodShopControllerImpl) handleQuoteOrderJSON(rl *readline.Instance) boo
 		return true
 	}
 
-
 	fmt.Fprintln(c.out, "\n--- Order Items ---")
 	fmt.Fprintln(c.out)
 	fmt.Fprintln(c.out, "--------+--------------+-----+------------+-----------")
@@ -161,19 +160,20 @@ func (c *FoodShopControllerImpl) handleQuoteOrderJSON(rl *readline.Instance) boo
 	fmt.Fprintln(c.out, "--------+--------------+-----+------------+-----------")
 
 	for _, ln := range quote.Lines {
-    	fmt.Fprintf(
-        c.out,
-        "%-7s | %-12s | %3d | %-10s | %s\n",
-        ln.Code, ln.Name, ln.Qty, ln.UnitPrice.String(), ln.LineTotal.String(),
+		fmt.Fprintf(
+			c.out,
+			"%-7s | %-12s | %3d | %-10s | %s\n",
+			ln.Code, ln.Name, ln.Qty, ln.UnitPrice.String(), ln.LineTotal.String(),
 		)
 	}
 
 	fmt.Fprintln(c.out, "\n--- Order Quote ---")
 	fmt.Fprintln(c.out)
-	fmt.Fprintf(c.out, "%-16s : %s\n", "Subtotal",        quote.Subtotal.String())
-	fmt.Fprintf(c.out, "%-16s : %s\n", "Pair Discount",   quote.PairDiscount.String())
-	fmt.Fprintf(c.out, "%-16s : %s\n", "Member Discount", quote.MemberDiscount.String())
-	fmt.Fprintf(c.out, "%-16s : %s\n", "Total",           quote.Total.String())	
+	fmt.Fprintf(c.out, "%-20s : %s\n", "Subtotal", quote.Subtotal.String())
+	fmt.Fprintf(c.out, "%-20s : %s\n", "Pair Discount", quote.PairDiscount.String())
+	fmt.Fprintf(c.out, "%-20s : %s\n", "Threshold Discount", quote.ThresholdDiscount.String())
+	fmt.Fprintf(c.out, "%-20s : %s\n", "Member Discount", quote.MemberDiscount.String())
+	fmt.Fprintf(c.out, "%-20s : %s\n", "Total", quote.Total.String())
 
 	return true
 }
@@ -214,15 +214,14 @@ func (c *FoodShopControllerImpl) handleViewOrderHistory() {
 		}
 
 		fmt.Fprintln(c.out)
-		fmt.Fprintf(c.out, "%-16s : %s\n", "Subtotal",        e.Subtotal.String())
-		fmt.Fprintf(c.out, "%-16s : %s\n", "Pair Discount",   e.PairDiscount.String())
+		fmt.Fprintf(c.out, "%-16s : %s\n", "Subtotal", e.Subtotal.String())
+		fmt.Fprintf(c.out, "%-16s : %s\n", "Pair Discount", e.PairDiscount.String())
 		fmt.Fprintf(c.out, "%-16s : %s\n", "Member Discount", e.MemberDiscount.String())
-		fmt.Fprintf(c.out, "%-16s : %s\n", "Total",           e.Total.String())
+		fmt.Fprintf(c.out, "%-16s : %s\n", "Total", e.Total.String())
 		fmt.Fprintln(c.out, "\n------------------------------")
 		fmt.Fprintln(c.out)
 	}
 }
-
 
 // readline-aware readLine
 func readLine(rl *readline.Instance) (string, error) {

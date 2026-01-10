@@ -20,6 +20,7 @@ type OrderQuote struct {
 	Lines          []OrderLine
 	Subtotal       domain.Money
 	PairDiscount   domain.Money
+	ThresholdDiscount domain.Money
 	MemberDiscount domain.Money
 	Total          domain.Money
 }

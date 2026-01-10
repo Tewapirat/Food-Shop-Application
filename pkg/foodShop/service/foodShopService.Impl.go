@@ -124,12 +124,17 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 
 	afterPairDiscount := subtotal.Sub(pairDiscount)
 
+	thresholdDiscount := calculateThresholdDiscount(afterPairDiscount)
+	
+	afterThresholdDiscount := afterPairDiscount.Sub(thresholdDiscount)
+
+
 	var memberDiscount domain.Money
 	if req.Member {
 		memberDiscount = afterPairDiscount.Percent(memberDiscountPercent)
 	}
 
-	total := afterPairDiscount.Sub(memberDiscount)
+	total := afterThresholdDiscount.Sub(memberDiscount)
 
 	s.orderNo++
 
@@ -140,6 +145,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 	Line:          lines,
 	Subtotal:       subtotal,
 	PairDiscount:   pairDiscount,
+	ThresholdDiscount: thresholdDiscount,
 	MemberDiscount: memberDiscount,
 	Total:          total,
 	
@@ -150,6 +156,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 		Lines:          lines,
 		Subtotal:       subtotal,
 		PairDiscount:   pairDiscount,
+		ThresholdDiscount: thresholdDiscount,
 		MemberDiscount: memberDiscount,
 		Total:          total,
 	}, nil
@@ -189,5 +196,16 @@ func calculatePairDiscount(
 	}
 
 	return totalDiscount, nil
+}
+
+func calculateThresholdDiscount(base domain.Money) domain.Money {
+
+	threshold := domain.THB(300)
+	discount := domain.THB(20)
+
+	if base >= threshold {
+		return discount
+	}
+	return domain.THB(0)
 }
 

@@ -57,6 +57,11 @@ func DefaultPromotions() []model.Promotion {
 			Title:       "Pair discount 5% (ORANGE/PINK/GREEN)",
 			Description: "Every pair (2 items of the same code) for ORANGE/PINK/GREEN gets 5% off that pair value.",
 		},
+		{
+			Code:        "OFF30%",
+			Title:       "Coupon OFF30% for 30% off",
+			Description: "Get 30% off on total bill when using coupon code OFF30%.",
+		},
 	}
 }
 

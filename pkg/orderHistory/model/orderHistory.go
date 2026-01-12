@@ -17,6 +17,7 @@ type OrderHistoryEntry struct {
 	Line 		   []model.OrderLine
 	Subtotal       domain.Money
 	PairDiscount   domain.Money
+	CouponCodeDiscount domain.Money
 	MemberDiscount domain.Money
 	Total          domain.Money
 }

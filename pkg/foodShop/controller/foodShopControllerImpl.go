@@ -172,6 +172,7 @@ func (c *FoodShopControllerImpl) handleQuoteOrderJSON(rl *readline.Instance) boo
 	fmt.Fprintln(c.out)
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Subtotal",        quote.Subtotal.String())
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Pair Discount",   quote.PairDiscount.String())
+	fmt.Fprintf(c.out, "%-16s : %s\n", "Coupon Code Discount", quote.CouponCodeDiscount.String())
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Member Discount", quote.MemberDiscount.String())
 	fmt.Fprintf(c.out, "%-16s : %s\n", "Total",           quote.Total.String())	
 
@@ -216,6 +217,7 @@ func (c *FoodShopControllerImpl) handleViewOrderHistory() {
 		fmt.Fprintln(c.out)
 		fmt.Fprintf(c.out, "%-16s : %s\n", "Subtotal",        e.Subtotal.String())
 		fmt.Fprintf(c.out, "%-16s : %s\n", "Pair Discount",   e.PairDiscount.String())
+		fmt.Fprintf(c.out, "%-16s : %s\n", "Coupon Code Discount", e.CouponCodeDiscount.String())
 		fmt.Fprintf(c.out, "%-16s : %s\n", "Member Discount", e.MemberDiscount.String())
 		fmt.Fprintf(c.out, "%-16s : %s\n", "Total",           e.Total.String())
 		fmt.Fprintln(c.out, "\n------------------------------")

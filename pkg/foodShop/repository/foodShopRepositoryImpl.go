@@ -60,7 +60,7 @@ func DefaultPromotions() []model.Promotion {
 		{
 			Code:        "OFF30%",
 			Title:       "Coupon OFF30% for 30% off",
-			Description: "Get 30% off on total bill when using coupon code OFF30%.",
+			Description: "Get 30% off on total bill when purchasing more than 1000 THB.",
 		},
 	}
 }

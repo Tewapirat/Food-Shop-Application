@@ -124,7 +124,7 @@ func (s *foodShopServiceImpl) QuoteOrder(req _foodShopModel.PurchasingRequest) (
 
 	afterPairDiscount := subtotal.Sub(pairDiscount)
 
-	couponCodeDiscount, err := calculateCouponDiscount(afterPairDiscount,req.CouponCode)
+	couponCodeDiscount, err := calculateCouponDiscount(afterPairDiscount, subtotal,req.CouponCode)
 	if err != nil {
 		return _foodShopModel.OrderQuote{}, err
 	}
@@ -200,7 +200,7 @@ func calculatePairDiscount(
 	return totalDiscount, nil
 }
 
-func calculateCouponDiscount(base domain.Money, couponCode string)(domain.Money, error){
+func calculateCouponDiscount(base, subtotal domain.Money, couponCode string)(domain.Money, error){
 	couponCode = strings.TrimSpace(strings.ToUpper(couponCode))
 
 	if couponCode == "" {
@@ -208,9 +208,16 @@ func calculateCouponDiscount(base domain.Money, couponCode string)(domain.Money,
 	}
 
 	switch couponCode {
-		case "OFF30%":
-			discount := base.Percent(30)
-			return discount, nil
+		case "OFF30":
+			minnimumOrderValue := domain.THB(1000)
+			if subtotal < minnimumOrderValue {
+				return domain.Money(0), &_foodShopException.CouponSpendMinimumNotMetError{
+					CouponCode:   couponCode,
+					MinimumSpend: minnimumOrderValue,
+					CurrentSpend: subtotal,
+				}
+			}
+			return base.Percent(30), nil
 		default:
 			return domain.Money(0), &_foodShopException.InvalidCouponError{Code: couponCode}
 	}

@@ -16,7 +16,6 @@ import (
 	_orderHistoryRepository "github.com/TewApirat/food-shop/pkg/orderHistory/repository"
 )
 
-func satang(v int64) domain.Money { return domain.Money(v) }
 
 func TestQuoteOrderSuccess(t *testing.T) {
 	type tc struct {
